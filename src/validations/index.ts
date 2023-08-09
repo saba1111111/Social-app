@@ -1,2 +1,2 @@
 export * from "./env.validtions";
-export * from "./users.validationSchemas";
+export * from "./schemas/users.validations.schemas";

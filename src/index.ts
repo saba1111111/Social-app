@@ -18,9 +18,7 @@ async function main() {
 	const database = container.get<Database>(TOKENS.POSTGRES_TOKEN);
 	const cacheMemory = container.get<CacheMemory>(TOKENS.REDIS_TOKEN);
 	const logger = container.get<Logger>(TOKENS.WINSTON_LOGGER_TOKEN);
-
-	cacheMemory.add();
-	cacheMemory.get();
+     
 
 	const app = new App(container, server, database, cacheMemory, logger);
 
