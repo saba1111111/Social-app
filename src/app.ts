@@ -1,8 +1,8 @@
 import { Container, inject } from "inversify";
-import { Controller } from "./interfaces/lib/controllers.interface";
+import { Controller } from "./interfaces";
 import { CacheMemory, Database, Logger, Server } from "./interfaces";
 import TOKENS from "./utils/tokens";
-import { UsersController } from "./controllers/lib/users.controller";
+import { UsersController } from "./controllers";
 import pg from "pg";
 
 export class App {
