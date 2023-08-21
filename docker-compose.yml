@@ -6,7 +6,7 @@ services:
         ports:
             - 8080:8080
         volumes:
-            - .:/usr/src/app
+            - .:/usr/src/apps
 
     redis:
         image: redis:latest

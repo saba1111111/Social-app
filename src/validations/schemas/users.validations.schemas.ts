@@ -5,3 +5,8 @@ export const registerSchema = Joi.object({
 	password: Joi.string().min(8).required(),
 	username: Joi.string().alphanum().min(3).required(),
 });
+
+export const verifySchema = Joi.object({
+	email: Joi.string().email().required(),
+	otp: Joi.number().required(),
+});

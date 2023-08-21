@@ -1,9 +1,18 @@
 ### Register
-POST http://localhost:8080/register 
+POST http://localhost:8080/users/register 
 content-type: application/json
 
 {
     "email": "sabapachulia123@gmail.com",
     "password": "ddddadaada",
     "username": "ddssss"
+}
+
+### verify
+POST http://localhost:8080/users/verify 
+content-type: application/json
+
+{
+    "email": "sabapachulia123@gmail.com",
+    "otp": 508135
 }

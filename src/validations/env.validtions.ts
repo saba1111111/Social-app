@@ -12,6 +12,8 @@ export class Config {
 		PG_HOST: Joi.string().required(),
 		REDIS_HOST: Joi.string().required(),
 		REDIS_PORT: Joi.number().required(),
+		EMAIL: Joi.string().email().required(),
+		EMAIL_PASSWORD: Joi.string().required(),
 	}).unknown();
 
 	static ValidateEnvVars() {

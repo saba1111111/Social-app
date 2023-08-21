@@ -14,23 +14,32 @@ export class Redis implements CacheMemory {
 			port: process.env.REDIS_PORT as number | undefined,
 			host: process.env.REDIS_HOST as string,
 		});
+
+		this.client.on("error", (error) => {
+			this.logger.error(`Failed connection to redis: ${error.message}`);
+		});
+
+		this.client.on("connect", () => {
+			this.logger.info("Successfully connect redis!");
+		});
 	}
 
-	public async connect() {
-		try {
-			await this.client.ping();
-			this.logger.info("Successfully connect redis!");
-		} catch (error) {
-			this.logger.error("Failed connection to redis!");
+	public async add(key: string, value: any): Promise<any>;
+	public async add(key: string, value: any, expiration: number): Promise<any>;
+	public async add(key: string, value: any, expiration?: number) {
+		await this.client.set(key, value);
+
+		if (expiration != undefined) {
+			await this.client.expire(key, expiration);
 		}
 	}
 
-	public add() {
-		this.client.set("name", "saba");
+	public async get(key: string) {
+		const data = await this.client.get(key);
+		return data ? data : null;
 	}
 
-	public async get() {
-		const data = await this.client.get("name");
-		this.logger.info(data);
+	public async remove(key: string) {
+		await this.client.del(key);
 	}
 }

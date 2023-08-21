@@ -7,7 +7,9 @@ export const validationMiddleware = (schema: Joi.ObjectSchema) => {
 
 		if (error) {
 			const message = error.details[0].message;
-			return res.status(400).json({ error: { message } });
+			return res
+				.status(422)
+				.json({ result: { status: "Failed", data: { message } } });
 		}
 
 		next();

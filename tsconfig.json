@@ -32,10 +32,7 @@
 		"paths": {
 			"@src/*": ["src/*"],
 			"@interfaces/*": ["src/interfaces/*"],
-			"@resolvers/*": ["src/resolvers/*"],
-			"@sql/*": ["src/utils/sql/*"],
 			"@middlewares/*": ["src/middlewares/*"],
-			"@routes/*": ["src/routes/*"],
 			"@services/*": ["src/services/*"],
 			"@config/*": ["src/config/*"],
 			"@tokens/*": ["src/utils/tokens/*"]

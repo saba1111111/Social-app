@@ -1,9 +1,8 @@
 import { Database, Logger } from "@src/interfaces";
 import TOKENS from "@src/utils/tokens";
-import { inject, injectable } from "inversify";
+import { inject } from "inversify";
 import pg from "pg";
 
-@injectable()
 export class Postgres implements Database {
 	private readonly client: pg.Client;
 
@@ -26,10 +25,11 @@ export class Postgres implements Database {
 			await this.client.connect();
 
 			this.logger.info("Successfully connect to postgres!");
+
+			return this.client;
 		} catch (error) {
 			this.logger.error(`Can not connect to postgress: ${error}`);
 			process.exit(1);
 		}
-		return this.client;
 	}
 }
