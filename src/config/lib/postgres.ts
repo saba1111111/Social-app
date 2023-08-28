@@ -9,14 +9,20 @@ export class Postgres implements Database {
 	constructor(
 		@inject(TOKENS.WINSTON_LOGGER_TOKEN) private readonly logger: Logger
 	) {
-		const { PG_USER, PG_PASSWORD, PG_DB, PG_HOST, PG_PORT } = process.env;
+		const {
+			POSTGRES_USER,
+			POSTGRES_PASSWORD,
+			POSTGRES_DB,
+			POSTGRES_HOST,
+			POSTGRES_PORT,
+		} = process.env;
 
 		this.client = new pg.Client({
-			user: PG_USER,
-			password: PG_PASSWORD,
-			database: PG_DB,
-			host: PG_HOST,
-			port: Number(PG_PORT),
+			user: POSTGRES_USER,
+			password: POSTGRES_PASSWORD,
+			database: POSTGRES_DB,
+			host: POSTGRES_HOST,
+			port: Number(POSTGRES_PORT),
 		});
 	}
 

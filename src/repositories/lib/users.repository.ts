@@ -24,13 +24,8 @@ export class UserRepository implements UserRepositoryInterface {
 
 	public async insertUser(user: User): Promise<any> {
 		const query =
-			"INSERT INTO users(username, email, password, authorized) VALUES($1,$2,$3,$4)";
-		const values = [
-			user.username,
-			user.email,
-			user.password,
-			user.authorized,
-		];
+			"INSERT INTO users(username, email, password) VALUES($1,$2,$3)";
+		const values = [user.username, user.email, user.password];
 
 		return this.client.query(query, values);
 	}

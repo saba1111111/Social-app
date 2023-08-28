@@ -5,11 +5,11 @@ export class Config {
 
 	static envVarsSchema = Joi.object({
 		APP_PORT: Joi.number().required(),
-		PG_USER: Joi.string().required(),
-		PG_PORT: Joi.number().required(),
-		PG_PASSWORD: Joi.string().required(),
-		PG_DB: Joi.string().required(),
-		PG_HOST: Joi.string().required(),
+		POSTGRES_USER: Joi.string().required(),
+		POSTGRES_PORT: Joi.number().required(),
+		POSTGRES_PASSWORD: Joi.string().required(),
+		POSTGRES_DB: Joi.string().required(),
+		POSTGRES_HOST: Joi.string().required(),
 		REDIS_HOST: Joi.string().required(),
 		REDIS_PORT: Joi.number().required(),
 		EMAIL: Joi.string().email().required(),

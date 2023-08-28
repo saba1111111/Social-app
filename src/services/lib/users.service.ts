@@ -1,29 +1,23 @@
-import {
-	CacheMemory,
-	MessageSender,
-	SecurityService,
-	User,
-	UserRepositoryInterface,
-} from "@src/interfaces";
+import * as TYPES from "@src/interfaces";
 import TOKENS from "@src/utils/tokens";
 import { inject, injectable } from "inversify";
 import { Logger } from "winston";
-import { verifyUserService } from "@src/interfaces";
 
 @injectable()
 export class UserService {
 	constructor(
 		@inject(TOKENS.WINSTON_LOGGER_TOKEN) private readonly logger: Logger,
 		@inject(TOKENS.USER_REPOSITORY_TOKEN)
-		private readonly userRepository: UserRepositoryInterface,
+		private readonly userRepository: TYPES.UserRepositoryInterface,
 		@inject(TOKENS.CRYPTO_SERVICE_TOKEN)
-		private readonly securityService: SecurityService,
-		@inject(TOKENS.REDIS_TOKEN) private readonly cacheMemory: CacheMemory,
+		private readonly securityService: TYPES.SecurityService,
+		@inject(TOKENS.REDIS_TOKEN)
+		private readonly cacheMemory: TYPES.CacheMemory,
 		@inject(TOKENS.MAIL_SENDING_SERVICE)
-		private readonly messageSender: MessageSender
+		private readonly messageSender: TYPES.MessageSender
 	) {}
 
-	public async registerUser(user: User) {
+	public async registerUser(user: TYPES.User) {
 		const { email } = user;
 
 		const userExists = Boolean(
@@ -42,19 +36,17 @@ export class UserService {
 			password: hashedPassword,
 		});
 
-		const OTP = this.securityService.generateOtpVerificationCode();
-		await this.cacheMemory.add(email, OTP, 300000);
-		await this.messageSender.sendMessage(
+		await this.generateAndSendOtp({
 			email,
-			"Otp Verification",
-			`${OTP}`
-		);
+			messageText: "Otp Verification",
+			OtpDuration: 300000,
+		});
 
 		return { email };
 	}
 
-	public async verify(data: verifyUserService) {
-		const { email, otp } = data;
+	public async verify(credentials: TYPES.verifyUserService) {
+		const { email, otp } = credentials;
 
 		const otpInCache = await this.cacheMemory.get(email);
 		if (!otpInCache || Number(otpInCache) !== otp) {
@@ -67,5 +59,34 @@ export class UserService {
 			email,
 			status: true,
 		});
+	}
+
+	public async login(credentials: TYPES.loginUser) {
+		const { email } = credentials;
+
+		const user = await this.userRepository.findOneByEmail(email);
+		if (!user) {
+			throw new Error("No such user!");
+		}
+
+		// if exist and autorize = false, do verify otp again
+
+		// gwnwrate access and refresh tokens and send back
+
+		// return successfully
+
+		return credentials;
+	}
+
+	public async generateAndSendOtp(credentials: {
+		email: string;
+		messageText: string;
+		OtpDuration: number;
+	}) {
+		const { email, OtpDuration, messageText } = credentials;
+
+		const OTP = this.securityService.generateOtpVerificationCode();
+		await this.cacheMemory.add(email, OTP, OtpDuration);
+		await this.messageSender.sendMessage(email, messageText, `${OTP}`);
 	}
 }

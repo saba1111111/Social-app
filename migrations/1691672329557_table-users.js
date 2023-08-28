@@ -11,7 +11,7 @@ exports.up = (pgm) => {
          password VARCHAR(255) NOT NULL,
          created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
          update_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-         authorized BOOLEAN NOT NULL
+         authorized BOOLEAN DEFAULT false NOT NULL
        );
     `);
 };

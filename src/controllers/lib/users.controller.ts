@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 import { controller, httpPost } from "inversify-express-utils";
 import { validationMiddleware } from "@src/middlewares";
-import { registerSchema, verifySchema } from "@src/validations";
+import { loginSchema, registerSchema, verifySchema } from "@src/validations";
 import TOKENS from "@src/utils/tokens";
 import { HandlerInterface } from "@src/interfaces";
 import { UserService } from "@src/services";
@@ -20,12 +20,10 @@ export class UsersController {
 	public async register(req: Request, res: Response) {
 		try {
 			const { username, email, password } = req.body;
-			const authorized = false;
 			const user = await this.userService.registerUser({
 				username,
 				email,
 				password,
-				authorized,
 			});
 
 			return this.handler.onSuccess(res, {
@@ -44,6 +42,18 @@ export class UsersController {
 			await this.userService.verify({ email, otp });
 
 			this.handler.onSuccess(res, { message: "Successfully verified!" });
+		} catch (error) {
+			this.handler.onConflict(res, error, 401);
+		}
+	}
+
+	@httpPost("/login", validationMiddleware(loginSchema))
+	public async login(req: Request, res: Response) {
+		try {
+			const { email, password } = req.body;
+			await this.userService.login({ email, password });
+
+			this.handler.onSuccess(res, { message: "Successfully login!" });
 		} catch (error) {
 			this.handler.onConflict(res, error, 401);
 		}

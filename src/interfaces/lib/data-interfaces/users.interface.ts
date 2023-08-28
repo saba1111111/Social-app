@@ -5,7 +5,6 @@ export interface User {
 	password: string;
 	created_at?: Date;
 	update_at?: Date;
-	authorized: boolean;
 }
 
 export interface verifyUserService {
@@ -16,4 +15,9 @@ export interface verifyUserService {
 export interface verifyUserRepository {
 	email: string;
 	status: boolean;
+}
+
+export interface loginUser {
+	email: string;
+	password: string;
 }
